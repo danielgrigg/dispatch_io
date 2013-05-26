@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Uncomment to always create test data
+# rm -rf /tmp/dispatch_io_data
+
+if [[ ! -d /tmp/dispatch_io_data ]]; then
+  echo -n "Generating lots of test data"
+  mkdir -p /tmp/dispatch_io_data
+
+  for i in {0..30}; do 
+    cat /dev/random | head -$(($RANDOM * 8)) > /tmp/dispatch_io_data/a$i
+    echo -n .
+  done
+fi
+
+echo
+rm -rf ./build
+mkdir build
+cd build
+
+echo "Building dispatch_io (using Makefile)"
+cmake -G "Unix Makefiles" .. && make && ./dispatch_io
+#cmake -G Xcode .. && xcodebuild
+
